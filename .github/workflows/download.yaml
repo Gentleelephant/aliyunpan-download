@@ -1,0 +1,46 @@
+name: Download and Upload to Aliyunpan
+on:
+  issues:
+    types:
+      - opened
+
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Set env
+        if: github.event_name == 'issues'
+        uses: jannekem/run-python-script-action@v1.2
+        id: script
+        with:
+          script: |
+            print("hello world")
+            print("github.event_name:", github.event_name)
+            print("github.event.issue.title:", github.event.issue.title)
+            print("github.event.issue.body:", github.event.issue.body)
+            print("github.event.issue.labels", github.event.issue.labels)
+
+#      - name: Download Aliyunpan CLI
+#        run: |
+#          echo "Install Aliyunpan CLI"
+#          # 检查 aliyunpan 命令是否存在
+#          if command -v aliyunpan &> /dev/null
+#          then
+#            echo "aliyunpan 已安装，跳过安装步骤"
+#          else
+#          echo "aliyunpan 未安装，开始安装..."
+#            sudo curl -fsSL http://file.tickstep.com/apt/pgp | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/tickstep-packages-archive-keyring.gpg > /dev/null && echo "deb [signed-by=/etc/apt/trusted.gpg.d/tickstep-packages-archive-keyring.gpg arch=amd64,arm64] http://file.tickstep.com/apt aliyunpan main" | sudo tee /etc/apt/sources.list.d/tickstep-aliyunpan.list > /dev/null && sudo apt-get update && sudo apt-get install -y aliyunpan
+#          fi
+#
+#      - name: Login to Aliyunpan
+#        run: |
+#          echo "Login to Aliyunpan"
