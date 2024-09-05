@@ -33,7 +33,7 @@ jobs:
 
             issueNumber = ${{ toJSON(github.event.issue.number) }}
             issueBody = ${{ toJSON(github.event.issue.body) }}
-            if issueBody is not None:
+            if not issueBody:
                set_env('ISSUE_BODY', str(issueBody))
             
             set_env('ISSUE_TITLE', ${{ toJSON(github.event.issue.title) }})
