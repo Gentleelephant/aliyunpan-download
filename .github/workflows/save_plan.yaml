@@ -124,9 +124,9 @@ jobs:
             elif '${{ env.ISSUE_TITLE }}' == '删除计划':
               planSchema.deletePlan('${{  env.ISSUE_BODY }}')
             elif '${{ env.ISSUE_TITLE }}' == '今日计划':
-              set_env('CONTENT', planSchema.getTodayReview())
+              set_env('CONTENT', str(planSchema.getTodayReview()))
             elif '${{ env.ISSUE_TITLE }}' == '所有计划':
-              set_env('CONTENT', planSchema.plan)
+              set_env('CONTENT', str(planSchema.plan))
             
             # 保存数据
             planSchema.saveToFile("plan_data.json")
