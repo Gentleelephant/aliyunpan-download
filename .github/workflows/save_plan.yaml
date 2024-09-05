@@ -39,7 +39,6 @@ jobs:
 
       - name: Save Plan
         uses: jannekem/run-python-script-action@v1.2
-        if : env.ISSUE_TITLE == '创建计划'
         id: script
         with:
           script: |
@@ -118,96 +117,10 @@ jobs:
             # 从文件加载数据，如果文件不存在则创建新文件
             planSchema.loadFromFile("plan_data.json")
 
-            # 添加计划
-            planSchema.addPlan(${{  env.ISSUE_BODY }})
-            
-            # 保存数据
-            planSchema.saveToFile("plan_data.json")
-
-
-      - name: Delete Plan
-        uses: jannekem/run-python-script-action@v1.2
-        if : env.ISSUE_TITLE == '删除计划'
-        id: script
-        with:
-          script: |
-            import json
-            from datetime import datetime, timedelta
-            import os
-            
-            class MemoryProgram:
-              def __init__(self):
-                self.plan = {}
-              
-              def addPlan(self, content, currentDate=None):
-                if currentDate is None:
-                  currentDate = datetime.now().date()
-                
-                reviewDates = [
-                currentDate,
-                currentDate + timedelta(days=1),
-                currentDate + timedelta(days=2),
-                currentDate + timedelta(days=4),
-                currentDate + timedelta(days=7),
-                currentDate + timedelta(days=15),
-                currentDate + timedelta(days=30)
-            ]
-              date_key = currentDate.isoformat()
-              if date_key not in self.plan:
-                self.plan[date_key] = {'content': [], 'reviewDates': []}
-              
-              if content not in self.plan[date_key]['content']:
-                self.plan[date_key]['content'].append(content)
-              else:
-                print(f"计划 '{content}' 已经存在于 {date_key} 的计划中。")
-              
-              self.plan[date_key]['reviewDates'] = [date.isoformat() for date in reviewDates]
-              
-              def deletePlan(self, content, date=None):
-                if date is None:
-                  date = datetime.now().date()
-                date_key = date.isoformat()
-                
-                if date_key in self.plan and content in self.plan[date_key]['content']:
-                  self.plan[date_key]['content'].remove(content)
-                  print(f"计划 '{content}' 已从 {date_key} 的计划中删除。")
-                  if not self.plan[date_key]['content']:
-                    del self.plan[date_key]
-                    print(f"{date_key} 的所有计划已删除。")
-                else:
-                  print(f"未找到 {date_key} 的计划 '{content}'。")
-              
-              def getTodayReview(self):
-                today = datetime.now().date().isoformat()
-                todayReview = []
-                
-                for d, p in self.plan.items():
-                  if today in p['reviewDates']:
-                    todayReview.extend(p['content'])
-                
-                return todayReview
-              
-              def saveToFile(self, file_path):
-                with open(file_path, 'w', encoding='utf-8') as file:
-                  json.dump(self.plan, file, ensure_ascii=False, indent=4)
-              
-              def loadFromFile(self, file_path):
-                if not os.path.exists(file_path):
-                  self.saveToFile(file_path)  # 如果文件不存在，创建新文件并保存空数据
-                else:
-                  if os.path.getsize(file_path) > 0:  # 检查文件是否为空
-                    with open(file_path, 'r', encoding='utf-8') as file:
-                      self.plan = json.load(file)
-            
-            
-            # 使用示例
-            planSchema = MemoryProgram()
-            
-            # 从文件加载数据，如果文件不存在则创建新文件
-            planSchema.loadFromFile("plan_data.json")
-
-            # 删除计划
-            planSchema.deletePlan(${{  env.ISSUE_BODY }})
+            if env.ISSUE_TITLE == '创建计划':
+              planSchema.addPlan(${{  env.ISSUE_BODY }})
+            elif env.ISSUE_TITLE == '删除计划':
+              planSchema.deletePlan(${{  env.ISSUE_BODY }})
             
             # 保存数据
             planSchema.saveToFile("plan_data.json")
