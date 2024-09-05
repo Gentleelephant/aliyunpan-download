@@ -27,7 +27,7 @@ jobs:
 
       - name: Set env
         if: github.event_name == 'issues'
-        uses: jannekem/run-python-script-action@v1.2
+        uses: jannekem/run-python-script-action@v1.7
         with:
           script: |
 
@@ -37,7 +37,7 @@ jobs:
             set_env('CLOUSE_ISSUE', '0')  
 
       - name: Save Plan
-        uses: jannekem/run-python-script-action@v1.2
+        uses: jannekem/run-python-script-action@v1.7
         with:
           script: |
             import json
@@ -120,9 +120,9 @@ jobs:
             elif env.ISSUE_TITLE == '删除计划':
               planSchema.deletePlan(${{  env.ISSUE_BODY }})
             elif env.ISSUE_TITLE == '今日计划':
-              print(planSchema.getTodayReview())
+              set_env('CONTENT', planSchema.getTodayReview())
             elif env.ISSUE_TITLE == '所有计划':
-              print(planSchema.plan)
+              set_env('CONTENT', planSchema.plan)
             
             # 保存数据
             planSchema.saveToFile("plan_data.json")
@@ -136,10 +136,25 @@ jobs:
           git add .
           git commit -m "Update plan"
           git push
-          
+
+      - name: Create comment
+        if: github.event_name == 'issues' && success() && (env.ISSUE_TITLE == '今日计划'  || env.ISSUE_TITLE == '所有计划')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `
+                详细输出: ${{ env.CONTENT }}
+                状态码: ${{ env.STATUS_CODE }}
+            `
+            })
+      
 
       - name: Close issue
-        if:  env.ISSUE_TITLE == '创建计划'  && success()
+        if:  github.event_name == 'issues' && success()
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'close-issue'
