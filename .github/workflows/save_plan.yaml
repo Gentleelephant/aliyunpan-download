@@ -30,7 +30,7 @@ jobs:
         uses: jannekem/run-python-script-action@v1.2
         with:
           script: |
-            
+
             set_env('ISSUE_TITLE', ${{ toJSON(github.event.issue.title) }})
             set_env('ISSUE_NUMBER', ${{ toJSON(github.event.issue.number) }})
             set_env('ISSUE_BODY', ${{ toJSON(github.event.issue.body) }})
@@ -119,6 +119,10 @@ jobs:
               planSchema.addPlan(${{  env.ISSUE_BODY }})
             elif env.ISSUE_TITLE == '删除计划':
               planSchema.deletePlan(${{  env.ISSUE_BODY }})
+            elif env.ISSUE_TITLE == '今日计划':
+              print(planSchema.getTodayReview())
+            elif env.ISSUE_TITLE == '所有计划':
+              print(planSchema.plan)
             
             # 保存数据
             planSchema.saveToFile("plan_data.json")
