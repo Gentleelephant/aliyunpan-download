@@ -117,13 +117,13 @@ jobs:
             # 从文件加载数据，如果文件不存在则创建新文件
             planSchema.loadFromFile("plan_data.json")
 
-            if ${{ env.ISSUE_TITLE }} == '创建计划':
+            if ${{ env.ISSUE_TITLE }} is '创建计划':
               planSchema.addPlan(${{  env.ISSUE_BODY }})
-            elif ${{ env.ISSUE_TITLE }} == '删除计划':
+            elif ${{ env.ISSUE_TITLE }} is '删除计划':
               planSchema.deletePlan(${{  env.ISSUE_BODY }})
-            elif ${{ env.ISSUE_TITLE }} == '今日计划':
+            elif ${{ env.ISSUE_TITLE }} is '今日计划':
               set_env('CONTENT', planSchema.getTodayReview())
-            elif ${{ env.ISSUE_TITLE }} == '所有计划':
+            elif ${{ env.ISSUE_TITLE }} is '所有计划':
               set_env('CONTENT', planSchema.plan)
             
             # 保存数据
