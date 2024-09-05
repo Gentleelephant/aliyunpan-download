@@ -133,6 +133,7 @@ jobs:
 
 #      TODO
       - name: Commit Data
+        if: github.event_name == 'issues' && success() && !(env.ISSUE_TITLE == '今日计划'  || env.ISSUE_TITLE == '所有计划')
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
