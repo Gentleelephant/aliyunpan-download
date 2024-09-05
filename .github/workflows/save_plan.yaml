@@ -32,10 +32,11 @@ jobs:
           script: |
 
             issueNumber = ${{ toJSON(github.event.issue.number) }}
+            issueBody = ${{ toJSON(github.event.issue.body) }}
             
             set_env('ISSUE_TITLE', ${{ toJSON(github.event.issue.title) }})
             set_env('ISSUE_NUMBER', str(issueNumber))
-            set_env('ISSUE_BODY', ${{ toJSON(github.event.issue.body) }})
+            set_env('ISSUE_BODY', str(issueBody))
             set_env('CLOUSE_ISSUE', '0')  
 
       - name: Save Plan
