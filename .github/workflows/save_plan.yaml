@@ -135,11 +135,17 @@ jobs:
       - name: Commit Data
         if: github.event_name == 'issues' && success() && !(env.ISSUE_TITLE == '今日计划'  || env.ISSUE_TITLE == '所有计划')
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add .
-          git commit -m "Update plan"
-          git push
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "There are uncommitted changes in the repository."
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git add .
+            git commit -m "Update plan"
+            git push
+          else
+            echo "The repository is clean with no uncommitted changes."
+          fi
+
 
       - name: Create comment
         if: github.event_name == 'issues' && success() && (env.ISSUE_TITLE == '今日计划'  || env.ISSUE_TITLE == '所有计划')
