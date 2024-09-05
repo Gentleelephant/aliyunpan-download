@@ -151,7 +151,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `
-                详细输出: ${{ env.CONTENT }}
+                计划列表: ${{ env.CONTENT }}
             `
             })
       
