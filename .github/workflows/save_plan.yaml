@@ -28,7 +28,6 @@ jobs:
       - name: Set env
         if: github.event_name == 'issues'
         uses: jannekem/run-python-script-action@v1.2
-        id: script
         with:
           script: |
             
@@ -39,7 +38,6 @@ jobs:
 
       - name: Save Plan
         uses: jannekem/run-python-script-action@v1.2
-        id: script
         with:
           script: |
             import json
