@@ -113,6 +113,8 @@ jobs:
             # 
             todayReview = planSchema.getTodayReview()
             
+            print('今日复习:',todayReview)
+            
             if len(todayReview) > 0:
               yag = yagmail.SMTP(user='${{ env.MAIL_SENDER }}', password='${{ env.MAIL_PASSWORD }}', host='${{ env.MAIL_PROTOCOL }}')
               #
