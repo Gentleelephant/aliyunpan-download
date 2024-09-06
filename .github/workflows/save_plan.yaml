@@ -118,7 +118,7 @@ jobs:
             planSchema.loadFromFile("plan_data.json")
 
             if '${{ env.ISSUE_TITLE }}' == '创建计划':
-              planSchema.addPlan('${{  env.ISSUE_BODY }}')
+              planSchema.addPlan(${{  env.ISSUE_BODY }})
             elif '${{ env.ISSUE_TITLE }}' == '删除计划':
               print('delete plan', '${{  env.ISSUE_BODY }}')
               planSchema.deletePlan(${{  env.ISSUE_BODY }})
