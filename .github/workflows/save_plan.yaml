@@ -120,7 +120,7 @@ jobs:
             if '${{ env.ISSUE_TITLE }}' == '创建计划':
               planSchema.addPlan(${{  env.ISSUE_BODY }})
             elif '${{ env.ISSUE_TITLE }}' == '删除计划':
-              print('delete plan', '${{  env.ISSUE_BODY }}')
+              print('delete plan', ${{  env.ISSUE_BODY }})
               planSchema.deletePlan(${{  env.ISSUE_BODY }})
             elif '${{ env.ISSUE_TITLE }}' == '今日计划':
               set_env('CONTENT', str(planSchema.getTodayReview()))
