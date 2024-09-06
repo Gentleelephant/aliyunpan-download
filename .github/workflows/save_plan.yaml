@@ -30,7 +30,6 @@ jobs:
         uses: jannekem/run-python-script-action@v1.7
         with:
           script: |
-
             issueNumber = ${{ toJSON(github.event.issue.number) }}
             issueBody = '${{ toJSON(github.event.issue.body) }}'
             
