@@ -40,6 +40,7 @@ jobs:
 
       - name: Save Plan
         uses: jannekem/run-python-script-action@v1.7
+        if: github.event_name == 'issues' && (env.ISSUE_TITLE == '创建计划' || env.ISSUE_TITLE == '删除计划' || env.ISSUE_TITLE == '今日计划' || env.ISSUE_TITLE == '所有计划')
         with:
           script: |
             import json
@@ -163,7 +164,7 @@ jobs:
       
 
       - name: Close issue
-        if:  github.event_name == 'issues' && success()
+        if:  github.event_name == 'issues' && success() && (env.ISSUE_TITLE == '今日计划'  || env.ISSUE_TITLE == '所有计划' || env.ISSUE_TITLE == '创建计划' || env.ISSUE_TITLE == '删除计划')
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'close-issue'
