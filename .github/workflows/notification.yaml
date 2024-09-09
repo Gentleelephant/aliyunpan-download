@@ -106,6 +106,22 @@ jobs:
                       self.plan = json.load(file)
             
             
+            def format_as_ordered_list(contents):
+              # 假设contents是一个列表
+              if not contents:
+                return "今日没有复习内容。"
+              
+              # 创建有序列表的头部
+              ol_header = "<ol>"
+              
+              # 创建有序列表的项目
+              ol_items = "\n".join([f"<li>{content}</li>" for content in contents])
+              
+              # 组合头部和项目，并添加结束标签
+              ol_list = ol_header + ol_items + "</ol>"
+              
+              return ol_list          
+  
             # 使用示例
             planSchema = MemoryProgram()
             
@@ -120,4 +136,4 @@ jobs:
             if len(todayReview) > 0:
               yag = yagmail.SMTP(user='${{ env.MAIL_SENDER }}', password='${{ env.MAIL_PASSWORD }}', host='${{ env.MAIL_PROTOCOL }}')
               #
-              yag.send(to='${{ env.MAIL_RECEIVER }}', subject='今日复习内容', contents=todayReview)
+              yag.send(to='${{ env.MAIL_RECEIVER }}', subject='今日复习内容', contents=format_as_ordered_list(todayReview))
